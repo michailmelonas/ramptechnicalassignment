@@ -44,8 +44,7 @@ class RetentionCurve:
         return weighted_retentions
 
     def predict(self, x):
-        y = RetentionCurve.retention_func(x, self.a, self.b)
-        return y
+        return RetentionCurve.retention_func(x, self.a, self.b)
 
     @staticmethod
     def retention_func(x, a, b):
@@ -58,7 +57,7 @@ class RetentionCurve:
         x = np.linspace(min(x), max(x), 100)
         a, b = round(self.a, RetentionCurve._ROUND), round(self.b, RetentionCurve._ROUND)
         plt.plot(x, RetentionCurve.retention_func(x, a, b), label='Fitted power function')
-        
+
         xs = sym.Symbol('x')
         tex = sym.latex(RetentionCurve.retention_func(xs, a, b)).replace('$', '')
         plt.title(r'Power function: $f(x)= %s$' %(tex),fontsize=15)
