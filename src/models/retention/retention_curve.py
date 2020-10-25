@@ -11,8 +11,8 @@ class RetentionCurve:
 
     def fit(self, df):
         x, y = RetentionCurve.get_input_arrays(df)
-        popt, _ = curve_fit(RetentionCurve.retention_func, x, y)
-        self.a, self.b = popt[0], popt[1]
+        parameters, _ = curve_fit(RetentionCurve.retention_func, x, y)
+        self.a, self.b = parameters[0], parameters[1]
 
     @classmethod
     def get_input_arrays(cls, df):
@@ -42,13 +42,14 @@ class RetentionCurve:
         return weighted_retentions
 
     def predict(self, x):
-        y = RetentionCurve.retention_func(x, self.a, self.b)
-        return y
+        if x == 0:
+            return float(1)
+
+        return RetentionCurve.retention_func(x, self.a, self.b)
 
     @staticmethod
     def retention_func(x, a, b):
-        y = a * x ** (-1 * b)
-        return y
+        return a * x ** (-1 * b)
 
     def visualize(self, df):
         x, y = RetentionCurve.get_input_arrays(df)

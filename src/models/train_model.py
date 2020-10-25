@@ -1,14 +1,17 @@
+from activeusers import ActiveUsers
 from newusers import NewUsers
 from retention import RetentionCurve
 import pandas as pd
 
 _DAYS = 180
+_FORECAST_PERIOD = 730
 _PROCESSED_DATA_PATH = '../../data/processed/'
 _REPORTS_FIGURES_PATH = '../../reports/figures/'
 
 
 # Get pre-processed data
 df = pd.read_csv(_PROCESSED_DATA_PATH + 'usage_data.csv')
+df['DATE'] = pd.to_datetime(df['DATE'])
 
 # Data for fitting retention curve
 weighted_triangle_df = df.tail(_DAYS)
@@ -33,7 +36,6 @@ dnu_time_series_df = dnu_time_series_df.reset_index(drop=True)
 
 cols = ['DATE', 'DNU']
 dnu_time_series_df = dnu_time_series_df[cols]
-dnu_time_series_df['DATE'] = pd.to_datetime(dnu_time_series_df['DATE'])
 
 # Visualize DNU time series
 nu = NewUsers()
@@ -43,3 +45,11 @@ fig.close()
 
 # Fit (simple) new user forecast model
 nu.fit(df=dnu_time_series_df)
+
+# Create ActiveUsers object
+au = ActiveUsers(new_users=nu, retention_curve=rc)
+
+# Predict future DAU using historic DNU data, together with rc and nu
+cols = ['DATE', 'DNU']
+historic_dnu_df = df[cols]
+au.predict(df=historic_dnu_df, n_periods=_FORECAST_PERIOD)

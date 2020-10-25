@@ -10,8 +10,11 @@ class NewUsers:
     def fit(self, df):
         self.average = df['DNU'].mean()
 
-    def predict(self, n_periods):
-        return self.average
+    def predict(self, date_):
+        prediction = {
+            'DNU': self.average
+        }
+        return prediction
 
     @staticmethod
     def visualize(df):
