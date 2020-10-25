@@ -1,7 +1,6 @@
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import numpy as np
-import sympy as sym
 
 
 class RetentionCurve:
