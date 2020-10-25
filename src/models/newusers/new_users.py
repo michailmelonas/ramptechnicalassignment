@@ -6,19 +6,13 @@ class NewUsers:
 
     def __init__(self):
         self.average = None
-        self.max = None
-        self.min = None
 
     def fit(self, df):
         self.average = df['DNU'].mean()
-        self.max = df['DNU'].max()
-        self.min = df['DNU'].min()
 
     def predict(self, date_):
         prediction = {
-            'yhat': self.average,
-            'ymax': self.max,
-            'ymin': self.min
+            'DNU': self.average
         }
         return prediction
 
