@@ -5,7 +5,6 @@ import sympy as sym
 
 
 class RetentionCurve:
-    _ROUND = 3
 
     def __init__(self, a=None, b=None):
         self.a = a
@@ -55,12 +54,8 @@ class RetentionCurve:
         plt.plot(x, y, 'ro', label='Weighted retention points')
 
         x = np.linspace(min(x), max(x), 100)
-        a, b = round(self.a, RetentionCurve._ROUND), round(self.b, RetentionCurve._ROUND)
-        plt.plot(x, RetentionCurve.retention_func(x, a, b), label='Fitted power function')
+        plt.plot(x, RetentionCurve.retention_func(x, self.a, self.b), label='Fitted power function')
 
-        xs = sym.Symbol('x')
-        tex = sym.latex(RetentionCurve.retention_func(xs, a, b)).replace('$', '')
-        plt.title(r'Power function: $f(x)= %s$' %(tex),fontsize=15)
         plt.legend(loc='upper right')
 
         return plt
