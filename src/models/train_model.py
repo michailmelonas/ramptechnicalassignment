@@ -58,5 +58,22 @@ predictions = au.predict(df=historic_dnu_df, n_periods=_FORECAST_PERIOD)
 # Visualize DAU time series
 plt.plot_date(df['DATE'], df['DAU'], linestyle='solid', marker=None)
 plt.plot_date(predictions['DATE'], predictions['DAU'], linestyle='solid', marker=None)
+plt.xlabel('Date'), plt.ylabel('DAU')
 plt.savefig(_REPORTS_FIGURES_PATH + 'dau.png')
 plt.close()
+
+# Verify approach: apply DAU prediction to most recent 100 obsevations
+historic_dnu_df = historic_dnu_df.head(900)
+dnu_time_series_df = df.head(900).tail(_DAYS)
+dnu_time_series_df = dnu_time_series_df.reset_index(drop=True)
+
+# Re-fit NewUsers and create ActiveUsers with different data
+nu.fit(df=dnu_time_series_df)
+au = ActiveUsers(new_users=nu, retention_curve=rc)
+predictions = au.predict(df=historic_dnu_df, n_periods=100)
+
+# Visualize DAU time series
+plt.plot_date(df['DATE'], df['DAU'], linestyle='solid', marker=None)
+plt.plot_date(predictions['DATE'], predictions['DAU'], linestyle='solid', marker=None)
+plt.xlabel('Date'), plt.ylabel('DAU')
+plt.savefig(_REPORTS_FIGURES_PATH + 'dau_verify.png')
