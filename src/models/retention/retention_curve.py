@@ -6,9 +6,9 @@ import sympy as sym
 
 class RetentionCurve:
 
-    def __init__(self, a=None, b=None):
-        self.a = a
-        self.b = b
+    def __init__(self):
+        self.a = None
+        self.b = None
 
     def fit(self, df):
         x, y = RetentionCurve.get_input_arrays(df)
@@ -43,11 +43,13 @@ class RetentionCurve:
         return weighted_retentions
 
     def predict(self, x):
-        return RetentionCurve.retention_func(x, self.a, self.b)
+        y = RetentionCurve.retention_func(x, self.a, self.b)
+        return y
 
     @staticmethod
     def retention_func(x, a, b):
-        return a * x ** (-1 * b)
+        y = a * x ** (-1 * b)
+        return y
 
     def visualize(self, df):
         x, y = RetentionCurve.get_input_arrays(df)
