@@ -58,5 +58,6 @@ class RetentionCurve:
         plt.plot(x, RetentionCurve.retention_func(x, self.a, self.b), label='Fitted power function')
 
         plt.legend(loc='upper right')
+        plt.xlabel('Days'), plt.ylabel('Retention rate')
 
         return plt
