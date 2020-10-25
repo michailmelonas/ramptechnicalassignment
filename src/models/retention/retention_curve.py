@@ -1,6 +1,7 @@
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 
 class RetentionCurve:
@@ -53,6 +54,7 @@ class RetentionCurve:
 
     def visualize(self, df):
         x, y = RetentionCurve.get_input_arrays(df)
+        plt.style.use('seaborn')
         plt.plot(x, y, 'ro', label='Weighted retention points')
 
         x = np.linspace(min(x), max(x), 100)
