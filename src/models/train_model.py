@@ -1,6 +1,7 @@
 from activeusers import ActiveUsers
 from newusers import NewUsers
 from retention import RetentionCurve
+import matplotlib.pyplot as plt
 import pandas as pd
 
 _DAYS = 180
@@ -52,4 +53,10 @@ au = ActiveUsers(new_users=nu, retention_curve=rc)
 # Predict future DAU using historic DNU data, together with rc and nu
 cols = ['DATE', 'DNU']
 historic_dnu_df = df[cols]
-au.predict(df=historic_dnu_df, n_periods=_FORECAST_PERIOD)
+predictions = au.predict(df=historic_dnu_df, n_periods=_FORECAST_PERIOD)
+
+# Visualize DAU time series
+plt.plot_date(df['DATE'], df['DAU'], linestyle='solid', marker=None)
+plt.plot_date(predictions['DATE'], predictions['DAU'], linestyle='solid', marker=None)
+plt.savefig(_REPORTS_FIGURES_PATH + 'dau.png')
+plt.close()
