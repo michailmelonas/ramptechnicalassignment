@@ -1,15 +1,13 @@
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import numpy as np
-import sympy as sym
 
 
 class RetentionCurve:
-    _ROUND = 3
 
-    def __init__(self, a=None, b=None):
-        self.a = a
-        self.b = b
+    def __init__(self):
+        self.a = None
+        self.b = None
 
     def fit(self, df):
         x, y = RetentionCurve.get_input_arrays(df)
@@ -44,23 +42,21 @@ class RetentionCurve:
         return weighted_retentions
 
     def predict(self, x):
-        return RetentionCurve.retention_func(x, self.a, self.b)
+        y = RetentionCurve.retention_func(x, self.a, self.b)
+        return y
 
     @staticmethod
     def retention_func(x, a, b):
-        return a * x ** (-1 * b)
+        y = a * x ** (-1 * b)
+        return y
 
     def visualize(self, df):
         x, y = RetentionCurve.get_input_arrays(df)
         plt.plot(x, y, 'ro', label='Weighted retention points')
 
         x = np.linspace(min(x), max(x), 100)
-        a, b = round(self.a, RetentionCurve._ROUND), round(self.b, RetentionCurve._ROUND)
-        plt.plot(x, RetentionCurve.retention_func(x, a, b), label='Fitted power function')
+        plt.plot(x, RetentionCurve.retention_func(x, self.a, self.b), label='Fitted power function')
 
-        xs = sym.Symbol('x')
-        tex = sym.latex(RetentionCurve.retention_func(xs, a, b)).replace('$', '')
-        plt.title(r'Power function: $f(x)= %s$' %(tex),fontsize=15)
         plt.legend(loc='upper right')
 
         return plt
